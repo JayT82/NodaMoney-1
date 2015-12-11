@@ -125,8 +125,12 @@ namespace NodaMoney
         public static Currency FromCode(string code)
         {
             Currency currency;
+            if (code == null)
+                throw new ArgumentNullException($"The value of 'code' cannot be null.");
+            if (string.IsNullOrEmpty(code))
+                throw new ArgumentException($"The value of 'code' should not be an empty value!");
             if (!Registry.TryGet(code, out currency))
-                throw new ArgumentException($"{code} is an unknown currency code!");
+                throw new ArgumentException($"{code} is an unknown ISO 4217 currency code!");
 
             return currency;
 
@@ -141,6 +145,9 @@ namespace NodaMoney
         /// <exception cref="ArgumentException">The 'code' in the given namespace is an unknown!</exception>
         public static Currency FromCode(string code, string @namespace)
         {
+
+            // TODO check for existence of given namespace
+            // TODO make exception messages same as in the description
             Currency currency;
             if (!Registry.TryGet(code, @namespace, out currency))           
                 throw new ArgumentException($"{code} is an unknown {@namespace} currency code!");
